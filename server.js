@@ -1,5 +1,5 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
+const { MailtrapClient } = require("mailtrap");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
@@ -19,24 +19,28 @@ app.get('/', (req, res) => {
 });
 
 
-// Nodemailer Transporter using Mailjet SMTP
-const transporter = nodemailer.createTransport({
-    host: 'in-v3.mailjet.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-        user: process.env.MAILJET_API_KEY,
-        pass: process.env.MAILJET_SECRET_KEY
-    }
+// Mailtrap Client Configuration
+const client = new MailtrapClient({
+  token: process.env.MAILTRAP_API_TOKEN,
 });
 
-// Verify SMTP connection on startup
-transporter.verify(function(error, success) {
-    if (error) {
-        console.log('❌ SMTP Connection Error:', error);
-    } else {
-        console.log('🚀 SMTP Server is ready to take our messages');
-    }
+const sender = {
+  email: process.env.MAILTRAP_SENDER_EMAIL,
+  name: process.env.MAILTRAP_SENDER_NAME,
+};
+
+// Verify Mailtrap connection on startup
+client.send({
+  from: sender,
+  to: [{ email: process.env.MAILTRAP_TO_EMAIL }],
+  subject: "Mailtrap Connection Test",
+  text: "Testing Mailtrap connection on startup",
+})
+.then(() => {
+  console.log('🚀 Mailtrap Client is ready to take our messages');
+})
+.catch((error) => {
+  console.log('❌ Mailtrap Connection Error:', error);
 });
 
 
@@ -45,8 +49,8 @@ app.post('/api/contact', (req, res) => {
     const { fname, lname, email, phone, message } = req.body;
 
     const mailOptions = {
-        from: process.env.MAILJET_FROM_EMAIL,
-        to: process.env.MAILJET_TO_EMAIL,
+        from: sender,
+        to: [{ email: process.env.MAILTRAP_TO_EMAIL }],
         subject: `New Contact Request from ${fname} ${lname}`,
         text: `
             First Name: ${fname}
@@ -66,16 +70,16 @@ app.post('/api/contact', (req, res) => {
         `
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
+    client.send(mailOptions)
+        .then((info) => {
+            console.log('✅ Email sent successfully!');
+            console.log('Response:', info);
+            res.status(200).send('success');
+        })
+        .catch((error) => {
             console.error('❌ Error sending email:', error);
             return res.status(500).send('error');
-        }
-        console.log('✅ Email sent successfully!');
-        console.log('Response:', info.response);
-        console.log('Message ID:', info.messageId);
-        res.status(200).send('success');
-    });
+        });
 });
 
 
@@ -84,8 +88,8 @@ app.post('/api/audit', (req, res) => {
     const { name, email, website, service, msg } = req.body;
 
     const mailOptions = {
-        from: process.env.MAILJET_FROM_EMAIL,
-        to: process.env.MAILJET_TO_EMAIL,
+        from: sender,
+        to: [{ email: process.env.MAILTRAP_TO_EMAIL }],
         subject: `New Free Audit Request from ${name}`,
         text: `
             Full Name: ${name}
@@ -105,14 +109,16 @@ app.post('/api/audit', (req, res) => {
         `
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error('Error sending email:', error);
+    client.send(mailOptions)
+        .then((info) => {
+            console.log('✅ Email sent successfully!');
+            console.log('Response:', info);
+            res.status(200).send('success');
+        })
+        .catch((error) => {
+            console.error('❌ Error sending email:', error);
             return res.status(500).send('error');
-        }
-        console.log('Email sent:', info.response);
-        res.status(200).send('success');
-    });
+        });
 });
 
 app.listen(port, () => {
