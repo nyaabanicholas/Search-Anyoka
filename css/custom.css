@@ -2510,16 +2510,6 @@ header.main-header .header-sticky.active {
     max-width: 1100px;
     margin: 0 auto;
 }
-.post-content{
-     font-weight: 700;
-    line-height: 1.2em;
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-    margin: 0 0 0.44em;
-}
-.post-content h3{
-font-size: 40px;
-}
 
 .post-entry {
     padding-bottom: 30px;
@@ -2530,17 +2520,12 @@ font-size: 40px;
     display: block;
     clear: both;
 }
-.post-entry h1,
-.post-entry h2,
-.post-entry h3,
-.post-entry h4,
-.post-entry h5,
-.post-entry h6 {
+.post-entry :is(h1, h2, h3, h4, h5, h6) {
     font-weight: 700;
     line-height: 1.2em;
     text-transform: uppercase;
     letter-spacing: -0.02em;
-    margin: 0 0 0.44em;
+    margin-bottom: 0.44em;
 }
 .post-tags .tag-links a,
 .project-tag a {
