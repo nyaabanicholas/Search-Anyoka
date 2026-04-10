@@ -2496,7 +2496,7 @@ header.main-header .header-sticky.active {
 .contact-us-img figure,
 .post-image figure {
     display: block;
-    border-radius: 18px;
+    border-radius: 10px;
     overflow: hidden;
 }
 .post-image img {
