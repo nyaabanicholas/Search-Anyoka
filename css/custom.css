@@ -2496,13 +2496,13 @@ header.main-header .header-sticky.active {
 .contact-us-img figure,
 .post-image figure {
     display: block;
-    border-radius: 10px;
+    border-radius: 18px;
     overflow: hidden;
 }
 .post-image img {
     width: 100%;
-    aspect-ratio: 1/0.5;
-    object-fit: cover;
+    height: auto; /* ✅ keeps original image ratio */
+    object-fit: contain;
     border-radius: 18px;
 }
 .post-content {
