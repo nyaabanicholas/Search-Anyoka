@@ -2531,26 +2531,7 @@ header.main-header .header-sticky.active {
     letter-spacing: -0.02em;
     margin: 0 0 0.44em;
 }
-/* 2. Tablet */
-@media (max-width: 992px) {
-    .post-entry h1 { font-size: 52px; }
-    .post-entry h2 { font-size: 38px; }
-    .post-entry h3 { font-size: 32px; }
-}
 
-/* 3. Mobile */
-@media (max-width: 768px) {
-    .post-entry h1 { font-size: 40px; }
-    .post-entry h2 { font-size: 30px; }
-    .post-entry h3 { font-size: 26px; }
-}
-
-/* 4. Small mobile */
-@media (max-width: 480px) {
-    .post-entry h1 { font-size: 32px; }
-    .post-entry h2 { font-size: 26px; }
-    .post-entry h3 { font-size: 22px; }
-}
 .post-tags .tag-links a,
 .project-tag a {
     text-transform: capitalize;
