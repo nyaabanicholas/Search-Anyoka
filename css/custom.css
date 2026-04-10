@@ -2490,8 +2490,11 @@ header.main-header .header-sticky.active {
     margin-right: 5px;
 }
 .post-image {
-    position: relative;
-    margin-bottom: 30px;
+    width: 100%;
+    max-width: 1200px;
+    aspect-ratio: 1200 / 630; /* keeps 1.91:1 ratio */
+    overflow: hidden;
+    border-radius: 18px;
 }
 .contact-us-img figure,
 .post-image figure {
@@ -2501,14 +2504,20 @@ header.main-header .header-sticky.active {
 }
 .post-image img {
     width: 100%;
-    height: auto; /* ✅ keeps original image ratio */
-    object-fit: contain;
-    border-radius: 18px;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 .post-content {
     width: 100%;
     max-width: 1100px;
     margin: 0 auto;
+}
+@media (min-width: 1200px) {
+    .post-image {
+        width: 1200px;
+        margin: 0 auto;
+    }
 }
 .post-entry {
     padding-bottom: 30px;
