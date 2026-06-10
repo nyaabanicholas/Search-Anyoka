@@ -1,5 +1,5 @@
 const express = require('express');
-const { MailtrapClient } = require("mailtrap");
+const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
@@ -19,29 +19,17 @@ app.get('/', (req, res) => {
 });
 
 
-// Mailtrap Client Configuration
-const client = new MailtrapClient({
-  token: process.env.MAILTRAP_API_TOKEN,
+// Nodemailer Transporter using Mailtrap SMTP
+const transporter = nodemailer.createTransport({
+    host: 'live.smtp.mailtrap.io',
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS
+    }
 });
 
-const sender = {
-  email: process.env.MAILTRAP_SENDER_EMAIL,
-  name: process.env.MAILTRAP_SENDER_NAME,
-};
-
-// Verify Mailtrap connection on startup
-client.send({
-  from: sender,
-  to: [{ email: process.env.MAILTRAP_TO_EMAIL }],
-  subject: "Mailtrap Connection Test",
-  text: "Testing Mailtrap connection on startup",
-})
-.then(() => {
-  console.log('🚀 Mailtrap Client is ready to take our messages');
-})
-.catch((error) => {
-  console.log('❌ Mailtrap Connection Error:', error);
-});
 
 
 // Contact Form Endpoint
@@ -49,8 +37,8 @@ app.post('/api/contact', (req, res) => {
     const { fname, lname, email, phone, message } = req.body;
 
     const mailOptions = {
-        from: sender,
-        to: [{ email: process.env.MAILTRAP_TO_EMAIL }],
+        from: process.env.MAIL_FROM,
+        to: process.env.MAIL_TO,
         subject: `New Contact Request from ${fname} ${lname}`,
         text: `
             First Name: ${fname}
@@ -70,16 +58,16 @@ app.post('/api/contact', (req, res) => {
         `
     };
 
-    client.send(mailOptions)
-        .then((info) => {
-            console.log('✅ Email sent successfully!');
-            console.log('Response:', info);
-            res.status(200).send('success');
-        })
-        .catch((error) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
             console.error('❌ Error sending email:', error);
             return res.status(500).send('error');
-        });
+        }
+        console.log('✅ Email sent successfully!');
+        console.log('Response:', info.response);
+        console.log('Message ID:', info.messageId);
+        res.status(200).send('success');
+    });
 });
 
 
@@ -88,8 +76,8 @@ app.post('/api/audit', (req, res) => {
     const { name, email, website, service, msg } = req.body;
 
     const mailOptions = {
-        from: sender,
-        to: [{ email: process.env.MAILTRAP_TO_EMAIL }],
+        from: process.env.MAIL_FROM,
+        to: process.env.MAIL_TO,
         subject: `New Free Audit Request from ${name}`,
         text: `
             Full Name: ${name}
@@ -109,16 +97,14 @@ app.post('/api/audit', (req, res) => {
         `
     };
 
-    client.send(mailOptions)
-        .then((info) => {
-            console.log('✅ Email sent successfully!');
-            console.log('Response:', info);
-            res.status(200).send('success');
-        })
-        .catch((error) => {
-            console.error('❌ Error sending email:', error);
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
             return res.status(500).send('error');
-        });
+        }
+        console.log('Email sent:', info.response);
+        res.status(200).send('success');
+    });
 });
 
 app.listen(port, () => {
