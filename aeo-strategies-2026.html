@@ -57,50 +57,63 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </style>
 <style>
 	.aeo-comparison-table {
-		width: 100%;
-		border-collapse: collapse;
-		margin: 25px 0;
-		font-size: 16px;
-		line-height: 1.6;
-	}
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #222222;
+    background: #ffffff;
+}
 
-	.aeo-comparison-table th,
-	.aeo-comparison-table td {
-		padding: 14px 16px;
-		text-align: left;
-		vertical-align: top;
-		border: 1px solid #e5e5e5;
-	}
+.aeo-comparison-table th,
+.aeo-comparison-table td {
+    padding: 14px 16px;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #e5e5e5;
+    color: #222222;
+}
 
-	.aeo-comparison-table th {
-		background: #0f3d5e;
-		color: #ffffff;
-		font-weight: 600;
-	}
+.aeo-comparison-table th {
+    background: #0f3d5e;
+    color: #ffffff;
+    font-weight: 600;
+}
 
-	.aeo-comparison-table tr:nth-child(even) {
-		background: #f8fafc;
-	}
+.aeo-comparison-table tbody tr {
+    background: #ffffff;
+}
 
-	.aeo-comparison-table tr:hover {
-		background: #f1f5f9;
-	}
+.aeo-comparison-table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
 
-	@media screen and (max-width: 767px) {
-		.aeo-comparison-table {
-			display: block;
-			overflow-x: auto;
-			white-space: normal;
-			-webkit-overflow-scrolling: touch;
-			font-size: 14px;
-		}
+.aeo-comparison-table tbody tr:hover {
+    background: #eef5f9;
+}
 
-		.aeo-comparison-table th,
-		.aeo-comparison-table td {
-			min-width: 150px;
-			padding: 12px;
-		}
-	}
+/* Make sure links inside the table remain readable */
+.aeo-comparison-table a {
+    color: #0f3d5e;
+}
+
+/* Mobile */
+@media screen and (max-width: 767px) {
+    .aeo-comparison-table {
+        display: block;
+        overflow-x: auto;
+        white-space: normal;
+        -webkit-overflow-scrolling: touch;
+        font-size: 14px;
+    }
+
+    .aeo-comparison-table th,
+    .aeo-comparison-table td {
+        min-width: 150px;
+        padding: 12px;
+    }
+}
 </style>
 
 </head>
